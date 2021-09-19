@@ -2,6 +2,8 @@ package model.entities;
 
 import java.util.Scanner;
 
+import model.enums.JogadoresEnum;
+
 public class Game {
 	private Boolean contraMaquina;
 	private Jogador jogador1;
@@ -9,20 +11,12 @@ public class Game {
 	private int pontuacaoJogador1;
 	private int pontuacaoJogador2;
 	
-	protected Tabuleiro tabuleiro = new Tabuleiro();
+	private Tabuleiro tabuleiro;
 	
 	private Scanner sc = new Scanner(System.in);
 	
 	public Game() {
-		
-	}
-	
-	public Game(Boolean contraMaquina, Jogador jogador1, Jogador jogador2, int pontuacaoJogador1, int pontuacaoJogador2) {
-		this.contraMaquina = contraMaquina;
-		this.jogador1 = jogador1;
-		this.jogador2 = jogador2;
-		this.pontuacaoJogador1 = pontuacaoJogador1;
-		this.pontuacaoJogador2 = pontuacaoJogador2;
+		this.tabuleiro = new Tabuleiro();
 	}
 
 	public Boolean getContraMaquina() {
@@ -51,15 +45,16 @@ public class Game {
 		System.out.println("1 - JOGADOR X JOGADOR");
 		System.out.println("2 - JOGADOR X MÁQUINA (FÁCIL)");
 		System.out.println("3 - JOGADOR X MÁQUINA (DIFÍCIL)");
+		System.out.print("OPÇÃO: ");
 		int option = sc.nextInt();
 		if (option == 1) {
 			this.contraMaquina = false;
-			Jogador jogador1 = new Jogador();
-			Jogador jogador2 = new Jogador();
-			modoJogador(jogador1, jogador2);
+			jogador1 = new Jogador(JogadoresEnum.X);
+			jogador2 = new Jogador(JogadoresEnum.O);
+			modoJogador();
 		} else {
 			this.contraMaquina = true;
-			Jogador jogador = new Jogador();
+			Jogador jogador = new Jogador(JogadoresEnum.X);
 			if (option == 2) {
 				modoFacil(jogador);
 			} else if (option == 3) {
@@ -71,187 +66,47 @@ public class Game {
 	public void imprimePontuacao() {
 		System.out.printf("PONTUAÇÃO: X = %d; O = %d%n", this.pontuacaoJogador1, this.pontuacaoJogador2);
 	}
-	
-	public boolean diagonal1(Jogador jogador) {
-		boolean venceu;
-		int count = 0;
+		
+	public boolean vitoria(Jogador jogador) {
 		for (int i = 0; i < this.tabuleiro.getTabuleiro().length; i++) {
-			for (int j = 0; i < this.tabuleiro.getTabuleiro()[i].length; j++) {
-				if ((i == 0 && j == 0) && (i == 1 && j == 1) && (i == 2 && j == 2)) {
-					this.tabuleiro.getTabuleiro()[i][j].equals(jogador.getTipoJogador());
-					count++;
-				}
+			if (this.tabuleiro.getTabuleiro()[i][0] == jogador.getTipoJogador()
+					&& this.tabuleiro.getTabuleiro()[i][1] == jogador.getTipoJogador()
+					&& this.tabuleiro.getTabuleiro()[i][2] == jogador.getTipoJogador()) {
+				return true;
+				
+			}
+			
+			if (this.tabuleiro.getTabuleiro()[0][i] == jogador.getTipoJogador()
+					&& this.tabuleiro.getTabuleiro()[1][i] == jogador.getTipoJogador()
+					&& this.tabuleiro.getTabuleiro()[2][i] == jogador.getTipoJogador()) {
+				return true;
+				
 			}
 		}
-		if (count == 3) {
-			venceu = true;
-		} else {
-			venceu = false;
+		
+		if (this.tabuleiro.getTabuleiro()[0][0] == jogador.getTipoJogador()
+				&& this.tabuleiro.getTabuleiro()[1][1] == jogador.getTipoJogador()
+				&& this.tabuleiro.getTabuleiro()[2][2] == jogador.getTipoJogador()) {
+			return true;
+			
 		}
 		
-		return venceu;
-	}
-	
-	public boolean diagonal2(Jogador jogador) {
-		boolean venceu;
-		int count = 0;
-		for (int i = 0; i < this.tabuleiro.getTabuleiro().length; i++) {
-			for (int j = 0; i < this.tabuleiro.getTabuleiro()[i].length; j++) {
-				if ((i == 0 && j == 2) && (i == 1 && j == 1) && (i == 2 && j == 0)) {
-					this.tabuleiro.getTabuleiro()[i][j].equals(jogador.getTipoJogador());
-					count++;
-				}
-			}
-		}
-		if (count == 3) {
-			venceu = true;
-		} else {
-			venceu = false;
+		if (this.tabuleiro.getTabuleiro()[0][2] == jogador.getTipoJogador()
+				&& this.tabuleiro.getTabuleiro()[1][1] == jogador.getTipoJogador()
+				&& this.tabuleiro.getTabuleiro()[2][0] == jogador.getTipoJogador()) {
+			return true;
+			
 		}
 		
-		return venceu;
-	}
-	
-	public boolean linha1(Jogador jogador) {
-		boolean venceu;
-		int count = 0;
-		for (int i = 0; i < this.tabuleiro.getTabuleiro().length; i++) {
-			for (int j = 0; i < this.tabuleiro.getTabuleiro()[i].length; j++) {
-				if ((i == 0 && j == 0) && (i == 1 && j == 0) && (i == 2 && j == 0)) {
-					this.tabuleiro.getTabuleiro()[i][j].equals(jogador.getTipoJogador());
-					count++;
-				}
-			}
-		}
-		if (count == 3) {
-			venceu = true;
-		} else {
-			venceu = false;
-		}
-		
-		return venceu;
-	}
-	
-	public boolean linha2(Jogador jogador) {
-		boolean venceu;
-		int count = 0;
-		for (int i = 0; i < this.tabuleiro.getTabuleiro().length; i++) {
-			for (int j = 0; i < this.tabuleiro.getTabuleiro()[i].length; j++) {
-				if ((i == 0 && j == 1) && (i == 1 && j == 1) && (i == 2 && j == 1)) {
-					this.tabuleiro.getTabuleiro()[i][j].equals(jogador.getTipoJogador());
-					count++;
-				}
-			}
-		}
-		if (count == 3) {
-			venceu = true;
-		} else {
-			venceu = false;
-		}
-		
-		return venceu;
-	}
-	
-	public boolean linha3(Jogador jogador) {
-		boolean venceu;
-		int count = 0;
-		for (int i = 0; i < this.tabuleiro.getTabuleiro().length; i++) {
-			for (int j = 0; i < this.tabuleiro.getTabuleiro()[i].length; j++) {
-				if ((i == 0 && j == 2) && (i == 1 && j == 2) && (i == 2 && j == 2)) {
-					this.tabuleiro.getTabuleiro()[i][j].equals(jogador.getTipoJogador());
-					count++;
-				}
-			}
-		}
-		if (count == 3) {
-			venceu = true;
-		} else {
-			venceu = false;
-		}
-		
-		return venceu;
-	}
-	
-	public boolean coluna1(Jogador jogador) {
-		boolean venceu;
-		int count = 0;
-		for (int i = 0; i < this.tabuleiro.getTabuleiro().length; i++) {
-			for (int j = 0; i < this.tabuleiro.getTabuleiro()[i].length; j++) {
-				if ((i == 0 && j == 0) && (i == 0 && j == 1) && (i == 0 && j == 2)) {
-					this.tabuleiro.getTabuleiro()[i][j].equals(jogador.getTipoJogador());
-					count++;
-				}
-			}
-		}
-		if (count == 3) {
-			venceu = true;
-		} else {
-			venceu = false;
-		}
-		
-		return venceu;
-	}
-	
-	public boolean coluna2(Jogador jogador) {
-		boolean venceu;
-		int count = 0;
-		for (int i = 0; i < this.tabuleiro.getTabuleiro().length; i++) {
-			for (int j = 0; i < this.tabuleiro.getTabuleiro()[i].length; j++) {
-				if ((i == 1 && j == 0) && (i == 1 && j == 1) && (i == 1 && j == 2)) {
-					this.tabuleiro.getTabuleiro()[i][j].equals(jogador.getTipoJogador());
-					count++;
-				}
-			}
-		}
-		if (count == 3) {
-			venceu = true;
-		} else {
-			venceu = false;
-		}
-		
-		return venceu;
-	}
-	
-	public boolean coluna3(Jogador jogador) {
-		boolean venceu;
-		int count = 0;
-		for (int i = 0; i < this.tabuleiro.getTabuleiro().length; i++) {
-			for (int j = 0; i < this.tabuleiro.getTabuleiro()[i].length; j++) {
-				if ((i == 2 && j == 0) && (i == 2 && j == 1) && (i == 2 && j == 2)) {
-					this.tabuleiro.getTabuleiro()[i][j].equals(jogador.getTipoJogador());
-					count++;
-				}
-			}
-		}
-		if (count == 3) {
-			venceu = true;
-		} else {
-			venceu = false;
-		}
-		
-		return venceu;
+		return false;
 	}
 	
 	public Jogador verificaVencedor() {
 		// Condições de vitória do jogador1
-		if (diagonal1(jogador1) 
-				|| diagonal2(jogador1) 
-				|| linha1(jogador1) 
-				|| linha2(jogador1) 
-				|| linha3(jogador1)
-				|| coluna1(jogador1)
-				|| coluna2(jogador1)
-				|| coluna3(jogador1)) {
+		if (vitoria(jogador1)) {
 			
 			return jogador1;
-		} else if (diagonal1(jogador2) 
-				|| diagonal2(jogador2) 
-				|| linha1(jogador2) 
-				|| linha2(jogador2) 
-				|| linha3(jogador2)
-				|| coluna1(jogador2)
-				|| coluna2(jogador2)
-				|| coluna3(jogador2)) {
+		} else if (vitoria(jogador2)) {
 			
 			return jogador2;
 		} else {
@@ -267,9 +122,40 @@ public class Game {
 		}
 	}
 	
-	public void modoJogador(Jogador jogador1, Jogador jogador2) {
-		this.jogador1 = jogador1;
-		this.jogador2 = jogador2;
+	public void modoJogador() {
+		Jogador vencedor = null;
+		
+		while (vencedor == null) {
+			System.out.printf("JOGADA DE JOGADOR %S: %n", jogador1.getTipoJogador());
+			System.out.print("SELECIONE A CORDENADA X: ");
+			int x = sc.nextInt();
+			System.out.println("SELECIONE A CORDENADA Y: ");
+			int y = sc.nextInt();
+			
+			jogador1.jogar(x, y, tabuleiro);
+			imprimirTabuleiro();
+			
+			vencedor = verificaVencedor();
+			if (vencedor != null) {
+				break;
+			}
+			
+			System.out.printf("JOGADA DE JOGADOR %S: %n", jogador2.getTipoJogador());
+			System.out.print("SELECIONE A CORDENADA X: ");
+			x = sc.nextInt();
+			System.out.println("SELECIONE A CORDENADA Y: ");
+			y = sc.nextInt();
+			
+			jogador2.jogar(x, y, tabuleiro);
+			imprimirTabuleiro();
+			
+			vencedor = verificaVencedor();
+			if (vencedor != null) {
+				break;
+			}
+		}
+		
+		System.out.printf("JOGADOR %S VENCEU!", vencedor.getTipoJogador());
 	}
 	
 	public void modoFacil(Jogador jogador) {
@@ -280,6 +166,18 @@ public class Game {
 	public void modoDificil(Jogador jogador) {
 		this.jogador1 = jogador;
 		this.jogador2 = new MaquinaDificil();
+	}
+	
+	public void imprimirTabuleiro() {
+		for (int i = 0; i < this.tabuleiro.getTabuleiro().length; i++) {
+			for (int j = 0; j < this.tabuleiro.getTabuleiro()[i].length; j++) {
+				System.out.printf("[%S]", tabuleiro.getTabuleiro()[i][j]);
+				if (j == 2) {
+					// Quebrando linha
+					System.out.print("\n");
+				}
+			}
+		}
 	}
 	
 }
