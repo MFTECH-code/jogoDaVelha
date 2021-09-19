@@ -55,13 +55,16 @@ public class Game {
 		int option = sc.nextInt();
 		if (option == 1) {
 			this.contraMaquina = false;
-			modoJogador();
+			Jogador jogador1 = new Jogador();
+			Jogador jogador2 = new Jogador();
+			modoJogador(jogador1, jogador2);
 		} else {
 			this.contraMaquina = true;
+			Jogador jogador = new Jogador();
 			if (option == 2) {
-				modoFacil();
+				modoFacil(jogador);
 			} else if (option == 3) {
-				modoDificil();
+				modoDificil(jogador);
 			}
 		}
 	}
@@ -80,18 +83,18 @@ public class Game {
 		// ***** Esse método será modificado *****
 	}
 	
-	public void modoJogador() {
-		this.jogador1 = new Jogador();
-		this.jogador2 = new Jogador();
+	public void modoJogador(Jogador jogador1, Jogador jogador2) {
+		this.jogador1 = jogador1;
+		this.jogador2 = jogador2;
 	}
 	
-	public void modoFacil() {
-		this.jogador1 = new Jogador();
+	public void modoFacil(Jogador jogador) {
+		this.jogador1 = jogador;
 		this.jogador2 = new MaquinaFacil();
 	}
 	
-	public void modoDificil() {
-		this.jogador1 = new Jogador();
+	public void modoDificil(Jogador jogador) {
+		this.jogador1 = jogador;
 		this.jogador2 = new MaquinaDificil();
 	}
 
