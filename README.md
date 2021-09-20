@@ -14,8 +14,8 @@ Desenvolver o jogo da velha com base em tudo que aprendemos em aula.
 ## Andamento do projeto
  - [X] - Classe Game
  - [X] - Tipo Enumerado JogadoresEnum
- - [ ] - Classe Jogador
- - [ ] - Classe MaquinaFacil
+ - [X] - Classe Jogador
+ - [X] - Classe MaquinaFacil
  - [ ] - Classe MaquinaDificil
- - [ ] - Classe Tabuleiro
- - [ ] - Programa principal onde o jogo irá rodar
+ - [X] - Classe Tabuleiro
+ - [X] - Programa principal onde o jogo irá rodar
