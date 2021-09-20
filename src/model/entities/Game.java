@@ -1,5 +1,6 @@
 package model.entities;
 
+import java.util.Random;
 import java.util.Scanner;
 
 import model.enums.JogadoresEnum;
@@ -14,6 +15,7 @@ public class Game {
 	private Tabuleiro tabuleiro;
 	
 	private Scanner sc = new Scanner(System.in);
+	private Random random = new Random();
 	
 	public Game() {
 		this.tabuleiro = new Tabuleiro();
@@ -54,11 +56,12 @@ public class Game {
 			modoJogador();
 		} else {
 			this.contraMaquina = true;
-			Jogador jogador = new Jogador(JogadoresEnum.X);
+			jogador1 = new Jogador(JogadoresEnum.X);
 			if (option == 2) {
-				modoFacil(jogador);
+				jogador2 = new MaquinaFacil(JogadoresEnum.O);
+				modoFacil();
 			} else if (option == 3) {
-				modoDificil(jogador);
+				modoDificil(jogador1);
 			}
 		}
 	}
@@ -124,12 +127,14 @@ public class Game {
 	
 	public void modoJogador() {
 		Jogador vencedor = null;
+		int contRodadas = 0;
+		//boolean variavelVerificadora = false;
 		
-		while (vencedor == null) {
+		while (contRodadas != 9) {
 			System.out.printf("JOGADA DE JOGADOR %S: %n", jogador1.getTipoJogador());
 			System.out.print("SELECIONE A CORDENADA X: ");
 			int x = sc.nextInt();
-			System.out.println("SELECIONE A CORDENADA Y: ");
+			System.out.print("SELECIONE A CORDENADA Y: ");
 			int y = sc.nextInt();
 			
 			jogador1.jogar(x, y, tabuleiro);
@@ -143,11 +148,13 @@ public class Game {
 			System.out.printf("JOGADA DE JOGADOR %S: %n", jogador2.getTipoJogador());
 			System.out.print("SELECIONE A CORDENADA X: ");
 			x = sc.nextInt();
-			System.out.println("SELECIONE A CORDENADA Y: ");
+			System.out.print("SELECIONE A CORDENADA Y: ");
 			y = sc.nextInt();
 			
 			jogador2.jogar(x, y, tabuleiro);
 			imprimirTabuleiro();
+			
+			contRodadas++;
 			
 			vencedor = verificaVencedor();
 			if (vencedor != null) {
@@ -155,12 +162,57 @@ public class Game {
 			}
 		}
 		
-		System.out.printf("JOGADOR %S VENCEU!", vencedor.getTipoJogador());
+		if (vencedor != null) {
+			System.out.printf("JOGADOR %S VENCEU!", vencedor.getTipoJogador());			
+		} else {
+			System.out.println("VELHA!!");
+		}
 	}
 	
-	public void modoFacil(Jogador jogador) {
-		this.jogador1 = jogador;
-		this.jogador2 = new MaquinaFacil();
+	public void modoFacil() {
+		Jogador vencedor = null;
+		
+		while (vencedor == null) {
+			System.out.printf("JOGADA DE JOGADOR %S: %n", jogador1.getTipoJogador());
+			System.out.print("SELECIONE A CORDENADA X: ");
+			int x = sc.nextInt();
+			System.out.print("SELECIONE A CORDENADA Y: ");
+			int y = sc.nextInt();
+			
+			System.out.println();
+			
+			jogador1.jogar(x, y, tabuleiro);
+			imprimirTabuleiro();
+			
+			vencedor = verificaVencedor();
+			if (vencedor != null) {
+				break;
+			}
+			
+			System.out.println("JOGADA DA MÁQUINA");
+			x = random.nextInt(3);
+			y = random.nextInt(3);
+			
+			System.out.println();
+			
+			jogador2.jogar(x, y, tabuleiro);
+			imprimirTabuleiro();
+			
+			
+			
+			vencedor = verificaVencedor();
+			if (vencedor != null) {
+				break;
+			}
+		}
+		
+		if (vencedor == jogador1) {
+			System.out.println("JOGADOR VENCEU!");			
+		} else if (vencedor == jogador2) {
+			System.out.println("MÁQUINA VENCEU!");
+		} else {
+			System.out.println("VELHA!");
+		}
 	}
 	
 	public void modoDificil(Jogador jogador) {
