@@ -25,4 +25,11 @@ public class Tabuleiro {
 		}
 	}
 	
+	public void limparTabuleiro() {
+		for (int i = 0; i < tabuleiro.length; i++) {
+			for (int j = 0; j < tabuleiro[i].length; j++) {
+				tabuleiro[i][j] = JogadoresEnum.N;
+			}
+		}
+	}
 }

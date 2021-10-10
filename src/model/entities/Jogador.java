@@ -6,6 +6,7 @@ import model.enums.JogadoresEnum;
 
 public class Jogador {
 	protected JogadoresEnum tipoJogador;
+	private int pontuacao;
 	
 	private Scanner sc = new Scanner(System.in);
 	
@@ -21,6 +22,14 @@ public class Jogador {
 		return tipoJogador;
 	}
 	
+	public int getPontuacao() {
+		return pontuacao;
+	}
+
+	public void setPontuacao(Integer pontuacao) {
+		this.pontuacao = pontuacao;
+	}
+
 	public boolean posicaoValida(int x, int y, Tabuleiro tabuleiro) {
 		if (tabuleiro.getTabuleiro()[x][y] == JogadoresEnum.N) {
 			return true;

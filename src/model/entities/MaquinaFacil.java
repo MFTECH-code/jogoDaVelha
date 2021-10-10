@@ -5,7 +5,6 @@ import java.util.Random;
 import model.enums.JogadoresEnum;
 
 public class MaquinaFacil extends Jogador {
-	
 	private Random random = new Random();
 	
 	public MaquinaFacil(JogadoresEnum tipoJogador) {
